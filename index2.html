@@ -1,0 +1,822 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BenQ Smart Projector</title>
+
+    <!-- <link rel="shortcut icon" href="images/favicon.png"> -->
+
+	<script src="http://cdn.pubnub.com/pubnub.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+		
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	
+    <link rel="stylesheet" href="http://www.getmdl.io/templates/text-only/material.min.css">
+    <link rel="stylesheet" href="http://www.getmdl.io/templates/text-only/styles.css">
+	
+    <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+
+	.mdl-layout__header-row>* {
+		margin: 0 auto;
+	}
+	
+	.mdl-layout__center {
+		margin: 0 auto;
+	}
+	
+	.mdl-card__actions {
+		min-height: 40px;
+	}
+	.mdl-card__actions .mdl-switch {
+		margin: 10px 0;
+	}
+	
+	.p--status {
+	  margin:0;
+	  font-size:10px;
+	  
+	}
+	.active {
+	  color: #32CD32;
+	}
+	.inactive {
+	  color: #FF4500;
+	}
+	.border {
+	  border: 1px solid red;
+	}
+	.mdl-card__settings {
+	  min-height:0;
+	}
+	.mdl-card__settings-content {
+	  margin: 20px 60px;
+	}
+	.mdl-card__settings-frame, .mdl-card__settings-frame h6, .mdl-card__settings-frame p {
+	  margin: 20px 60px;
+	}
+	.mdl-layout__tab-bar {
+	  padding-left:0;
+	}
+	.section-settings--center {
+	  max-width: 480px;
+	}
+	.section-faq--center {
+	  max-width: 420px;
+	}
+	
+	.mdl-option-frame {
+	  width:100%;
+	}
+	
+	.mdl-option-content {
+	  margin: 10px 30px;
+	  min-height: 40px;
+	  display:flex;
+	}
+	.mdl-option-icon {
+		width:64px;
+	}
+	
+	.mdl-option-text {
+		flex-grow: 1;
+		width:230px;
+		margin-right:10px;
+	}
+	.mdl-option-text span {
+		width:100%;
+		float:left;
+	}
+	.mdl-option-label {
+		
+	}
+	.mdl-option-sublabel {
+		font-size:10px;
+		color: #AAAAAA;
+	}
+	.mdl-option-sublabel .mdl-slider__container {
+		margin: 10px 0 0;
+	}
+	.mdl-option-button {
+		width:64px;
+	}
+	.mdl-option-icon i {
+		margin: 0 20px;
+	}
+
+	.mdl-option-header {
+		font-size: 12px;
+		color: #00bfff;	
+	}
+	.mdl-option-frame a {
+		color: #606060;
+		font-weight:400;
+	}
+	.mdl-divider {
+		border:0;
+		height:1px;
+		background:#CCC;
+		margin:25px 0; 
+	}
+	.mdl-option-content hr {
+		margin:50px 0 20px; 0; 
+		border:1px solid red;
+	}
+
+	.mdl-popup-frame {
+		position: absolute;
+		margin: 0 0 60px -190px;
+		padding: 0;		
+		top:20%;
+		left:50%;
+		width: 360px;
+
+		z-index:99;
+
+		background-color: #fff;
+	}
+	.mdl-popup-frame-options {
+		width:100%;
+		/* height:300px; /* Limit the popup frame */
+		overflow-y:scroll;
+		overflow-x:hidden;
+	}
+	.mdl-popup-frame-options::-webkit-scrollbar { 
+		display: none; 
+	}
+	.mdl-overlay {
+	  background-color: rgba(0,0,0,0.4);
+	  height: 100%;
+	  width: 100%;
+	  position: fixed;
+	  top: 0;
+	  z-index: 98;
+	  display: none;  /* Default Hidden */
+	}
+	.mdl-popup-content {
+		margin: 40px;
+		padding:0;
+	}
+	.mdl-radio {
+		width:100%;
+		height:60px;
+		line-height:60px;
+	}
+	.divider-line {
+		border-bottom: 1px solid #CCC;	
+	}
+	.mdl-radio__inner-circle {
+		top:24px;
+		left:auto;
+		right:4px;
+	}
+	.mdl-radio__outer-circle {
+		top:20px;
+		left:auto;
+		right:0;
+	}
+	.mdl-radio.is-upgraded {
+		padding-left: 0;
+	}
+	.mdl-radio__ripple-container {
+		top:6px;
+		left: auto;
+		right: -13px;
+	}
+	.align-right {
+		float:right;
+	}
+	.mdl-popup-content .mdl-button {
+		margin:20px 0;
+	}
+	#select_picture_mode {
+		display:none;
+	}
+	#select_source {
+		display:none;
+	}
+	.benq-logo {
+	  margin:0;
+	  padding:0;
+	  width:100px;
+	}
+	.mdl-demo .mdl-layout__tab-bar {
+		padding-left:0;
+	}
+    </style>
+	
+  </head>
+  
+  <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+      
+		
+	  <div id="select_picture_mode" class="mdl-popup-frame mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+        <div class="mdl-popup-content">
+			<h4>Picture Mode</h4>
+			<div class="mdl-popup-frame-options">
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="pmode-dynamic">
+				  <span class="mdl-radio__label">Dynamic</span>
+				  <input type="radio" id="pmode-dynamic" class="mdl-radio__button" name="pmode" value="dynamic">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="pmode-preset">
+				  <span class="mdl-radio__label">Presentation</span>
+				  <input type="radio" id="pmode-preset" class="mdl-radio__button" name="pmode" value="preset">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="pmode-srgb">
+				  <span class="mdl-radio__label">sRGB</span>
+				  <input type="radio" id="pmode-srgb" class="mdl-radio__button" name="pmode" value="srgb">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="pmode-bright">
+				  <span class="mdl-radio__label">Bright</span>
+				  <input type="radio" id="pmode-bright" class="mdl-radio__button" name="pmode" value="bright">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="pmode-livingroom">
+				  <span class="mdl-radio__label">Living Room</span>
+				  <input type="radio" id="pmode-livingroom" class="mdl-radio__button" name="pmode" value="livingroom">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="pmode-game">
+				  <span class="mdl-radio__label">Game</span>
+				  <input type="radio" id="pmode-game" class="mdl-radio__button" name="pmode" value="game">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="pmode-cine">
+				  <span class="mdl-radio__label">Cinema</span>
+				  <input type="radio" id="pmode-cine" class="mdl-radio__button" name="pmode" value="cine">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="pmode-std">
+				  <span class="mdl-radio__label">Standard</span>
+				  <input type="radio" id="pmode-std" class="mdl-radio__button" name="pmode" value="std">
+				</label>
+			</div>
+			<button class="mdl-button mdl-js-button mdl-button--primary align-right cancel">
+			  Cancel
+			</button>
+		</div>
+	  </div>
+
+	  
+	  
+	  
+	  <div id="select_source" class="section--center mdl-popup-frame mdl-card__settings-frame mdl-shadow--2dp">
+		<div class="mdl-popup-content">
+			<h4>Source</h4>
+			<div class="mdl-popup-frame-options">
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-comp">
+				  <span class="mdl-radio__label">Computer 1</span>
+				  <input type="radio" id="src-comp" class="mdl-radio__button" name="source" value="RGB">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-comp2">
+				  <span class="mdl-radio__label">Computer 2</span>
+				  <input type="radio" id="src-comp2" class="mdl-radio__button" name="source" value="RGB2">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-DVI-A">
+				  <span class="mdl-radio__label">DVI-A</span>
+				  <input type="radio" id="src-DVI-A" class="mdl-radio__button" name="source" value="dviA">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-DVI-D">
+				  <span class="mdl-radio__label">DVI-D</span>
+				  <input type="radio" id="src-DVI-D" class="mdl-radio__button" name="source" value="dvid">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-hdmi">
+				  <span class="mdl-radio__label">HDMI</span>
+				  <input type="radio" id="src-hdmi" class="mdl-radio__button" name="source" value="hdmi">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-hdmi2">
+				  <span class="mdl-radio__label">HDMI 2</span>
+				  <input type="radio" id="src-hdmi2" class="mdl-radio__button" name="source" value="hdmi2">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-vid">
+				  <span class="mdl-radio__label">Composite</span>
+				  <input type="radio" id="src-vid" class="mdl-radio__button" name="source" value="vid">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-svid">
+				  <span class="mdl-radio__label">S-Video</span>
+				  <input type="radio" id="src-svid" class="mdl-radio__button" name="source" value="svid">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-network">
+				  <span class="mdl-radio__label">Network</span>
+				  <input type="radio" id="src-network" class="mdl-radio__button" name="source" value="network">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect divider-line" for="src-usbdisplay">
+				  <span class="mdl-radio__label">USB Display</span>
+				  <input type="radio" id="src-usbdisplay" class="mdl-radio__button" name="source" value="usbdisplay">
+				</label>
+				<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="src-usbreader">
+				  <span class="mdl-radio__label">USB Reader</span>
+				  <input type="radio" id="src-usbreader" class="mdl-radio__button" name="source" value="usbreader">
+				</label>
+			</div>
+			<button class="mdl-button mdl-js-button mdl-button--primary align-right cancel">
+			  Cancel
+			</button>
+		</div>
+	  </div>
+				
+	  <div class="mdl-overlay"></div>
+	  
+	  <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+          <h3>BenQ Smart Projector</h3>
+        </div>
+        <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        </div>
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+			<div class="mdl-layout__center">
+				<a href="#" class="mdl-layout__tab benq-logo"><img src="benq_logo_white.png" alt="BenQ" align="center" /></a>
+				<a href="#overview" class="mdl-layout__tab is-active">Overview</a>
+				<a href="#settings" class="mdl-layout__tab">Settings</a>
+				<a href="#FAQ" class="mdl-layout__tab">FAQ</a>
+
+<!--            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">
+					<i class="material-icons" role="presentation">add</i>
+					<span class="visuallyhidden">Add</span>
+				</button> -->
+			</div>
+        </div>
+      </header>
+	  
+      <main class="mdl-layout__content">
+	  
+        <div class="mdl-layout__tab-panel is-active" id="overview">
+		
+          <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
+              <i class="material-icons">airplay</i>
+            </header>
+            <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+              <div class="mdl-card__supporting-text">
+                <h4>Projector 1 <span class="p--status inactive">Inactive</span></h4>
+                Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris labore nisi amet do dolor eu fugiat consectetur elit cillum esse.
+              </div>
+              <div class="mdl-card__actions">
+				<!--                 
+				<a href="#" class="mdl-button">ON</a>
+				<a href="#" class="mdl-button">OFF</a>
+				<a href="#" class="mdl-button">Volume Up</a>
+				<a href="#" class="mdl-button">Volume Down</a>
+				-->
+				<label class="mdl-switch mdl-js-switch" for="switch-power-1">
+				  <span class="mdl-switch__label">Power ON/OFF</span>
+				  <input type="checkbox" id="switch-power-1" placeholder="*pow=" class="mdl-switch__input" >
+				</label>
+
+              </div>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn1">
+              <i class="material-icons">more_vert</i>
+            </button>
+            <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn1">
+              <li class="mdl-menu__item">Settings</li>
+              <li class="mdl-menu__item" disabled>Refresh</li>
+              <li class="mdl-menu__item">Remove</li>
+            </ul>
+          </section>
+		  		  	  
+          <section class="section--footer mdl-grid"></section>
+		  
+        </div>
+		
+        <div class="mdl-layout__tab-panel mdl-color--grey-100" id="settings">
+		  
+		  <section class="section-settings--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+            <div class="mdl-card mdl-cell mdl-cell--12-col mdl-card__settings">
+              <div class="mdl-card__settings-content">
+                <h4>Projector 1</h4>
+				<span class="p--status inactive">Inactive</span>
+              </div>
+            </div>
+
+			<div class="mdl-cell mdl-cell--12-col mdl-card__settings-frame">
+								
+				<div class="mdl-option-frame">
+				
+					<h6 class="mdl-option-header">Settings</h6>
+					
+					<div class="mdl-option-content">
+					
+						<div class="mdl-option-icon">	
+							<span><i class="material-icons">power_settings_new</i></span>						
+						</div>
+						<div class="mdl-option-text">
+							<span class="mdl-option-label">Power</span>
+							<span class="mdl-option-sublabel"></span>
+						</div>
+						<div class="mdl-option-button">
+							<label class="mdl-switch mdl-js-switch mdl-switch-inline" for="switch-power-2">
+								<input type="checkbox" id="switch-power-2" placeholder="*pow=" class="mdl-switch__input" >
+							</label>
+						</div>
+					</div>
+					
+					<div class="mdl-option-content">
+					
+						<div class="mdl-option-icon">	
+							<span><i class="material-icons">wb_iridescent</i></span>						
+						</div>
+						<div class="mdl-option-text">
+							<span class="mdl-option-label">Blank Screen</span>
+							<span class="mdl-option-sublabel">Toggle blank screen on/off</span>
+						</div>
+						<div class="mdl-option-button">
+							<label class="mdl-switch mdl-js-switch mdl-switch-inline" for="switch-blank">
+								<input type="checkbox" id="switch-blank" placeholder="*blank=" class="mdl-switch__input" >
+							</label>
+						</div>
+					</div>
+					
+					<div class="mdl-option-content">
+					
+						<div class="mdl-option-icon">	
+							<span><i class="material-icons">screen_rotation</i></span>						
+						</div>
+						<div class="mdl-option-text">
+							<span class="mdl-option-label">Auto Rotate Screen</span>
+							<span class="mdl-option-sublabel">Adjust screen when projector is turned</span>
+						</div>
+						<div class="mdl-option-button">
+							<label class="mdl-switch mdl-js-switch mdl-switch-inline" for="switch-rotate">
+								<input type="checkbox" id="switch-rotate" class="mdl-switch__input" >
+							</label>
+						</div>
+					</div>
+					
+					<a href="#" id="btn_source" class="mdl-option-content">
+							<div class="mdl-option-icon">	
+								<span><i class="material-icons">launch</i></span>						
+							</div>
+							<div class="mdl-option-text">
+									<span class="mdl-option-label">Source</span>
+									<span class="mdl-option-sublabel">Select display source</span>
+							</div>
+					</a>
+					
+					<hr class="mdl-divider"></hr>
+					
+					<h6 class="mdl-option-header">Display</h6>
+					
+
+					
+					<a href="#" id="btn_pmode" class="mdl-option-content">
+							<div class="mdl-option-icon">	
+								<span><i class="material-icons">photo</i></span>						
+							</div>
+							<div class="mdl-option-text">
+									<span class="mdl-option-label">Picture Mode</span>
+									<span class="mdl-option-sublabel">Current Display Mode</span>
+							</div>
+					</a>
+					
+					<div class="mdl-option-content">
+					
+						<div class="mdl-option-icon">	
+							<span><i class="material-icons">local_florist</i></span>						
+						</div>
+						<div class="mdl-option-text">
+							<span class="mdl-option-label">Eco Mode</span>
+							<span class="mdl-option-sublabel">Save power</span>
+						</div>
+						<div class="mdl-option-button">
+							<label class="mdl-switch mdl-js-switch mdl-switch-inline" for="switch-eco">
+								<input type="checkbox" id="switch-eco" placeholder="*lampm=" class="mdl-switch__input" >
+							</label>
+						</div>
+					</div>
+									
+					<div class="mdl-option-content">
+					
+						<div class="mdl-option-icon">	
+							<span><i class="material-icons">brightness_5</i></span>						
+						</div>
+						<div class="mdl-option-text">
+							<span class="mdl-option-label">Brightness</span>
+							<span class="mdl-option-sublabel">
+								<!-- Slider with Starting Value -->
+								<input class="mdl-slider mdl-js-slider" type="range"
+								  min="0" max="100" value="50" tabindex="0">
+							</span>
+						</div>
+					</div>
+					
+					<hr class="mdl-divider"></hr>
+					
+					<h6 class="mdl-option-header">Sound</h6>
+					
+					<div class="mdl-option-content">
+					
+						<div class="mdl-option-icon">	
+							<span><i class="material-icons">volume_up</i></span>						
+						</div>
+						<div class="mdl-option-text">
+							<span class="mdl-option-label">Volume</span>
+							<span class="mdl-option-sublabel">
+								<!-- Slider with Starting Value -->
+								<input class="mdl-slider mdl-js-slider" type="range"
+								  min="0" max="100" value="25" tabindex="0">
+							</span>
+						</div>
+					</div>
+					
+					<div class="mdl-option-content">
+					
+						<div class="mdl-option-icon">	
+							<span><i class="material-icons">volume_off</i></span>						
+						</div>
+						<div class="mdl-option-text">
+							<span class="mdl-option-label">Mute</span>
+							<span class="mdl-option-sublabel">Turn volume off</span>
+						</div>
+						<div class="mdl-option-button">
+							<label class="mdl-switch mdl-js-switch mdl-switch-inline" for="switch-mute">
+								<input type="checkbox" id="switch-mute" placeholder="*mute=" class="mdl-switch__input" >
+							</label>
+						</div>
+					</div>
+									
+					<div class="mdl-option-content"></div>
+										
+				</div>
+			</div>
+			
+          </section>
+		  
+		  <section class="section--footer mdl-grid"></section>
+        </div>
+		
+        <div class="mdl-layout__tab-panel mdl-color--grey-100 " id="FAQ">
+          <section class="section-faq--center mdl-grid mdl-grid--no-spacing">
+            <div class="mdl-cell mdl-cell--12-col">
+              <h4>Smart Projector FAQ</h4>
+              This is an IoT (Internet of Things) experiment to control BenQ's smart projector via Wi-Fi and use different sensors to communicate.
+
+              <h5 id="lorem1">Things to Try:</h5>
+              Here are a few things to try out with the smart projector.
+              <ul>
+                <li>Concept 1.</li>
+                <li>Concept 2.</li>
+                <li>Concept 3.</li>
+              </ul>
+
+            </div>
+          </section>
+        </div>
+		
+		
+      </main>
+    </div>
+	
+    <script src="http://www.getmdl.io/material.min.js"></script>
+	
+	<script type="text/javascript">
+		// publish key and subscribe key are stored in the ArduinoToggleGarage controller
+		var pubnub = PUBNUB.init({
+			publish_key: 'pub-c-59a0e3b0-657d-42c5-b828-161f62e52922',
+			subscribe_key: 'sub-c-dd394426-770c-11e5-9042-0619f8945a4f',
+			origin : 'pubsub.pubnub.com',
+			ssl : true
+		});
+
+		function PJTcmd(RS232cmd)
+		{
+			pubnub.publish({
+				channel: "ComandFromWeb",
+				// Two channel: ComandFromWeb and FeedbackResponse
+				message: RS232cmd
+			});
+		}
+		
+		function PJTdata()
+		{
+			//pubnub.subscribe({
+			//	channel: '',
+			//	message: function(m) { console.log(m); },
+			//	connect: pubnub.publish({
+			//				channel: "ComandFromWeb",
+			//				message: RS232cmd
+			//			 });
+			
+			//pubnub.subscribe({
+			//	channel  : "hello_world",
+			//	callback : function(message) {
+			//		console.log( " > ", message );
+			//	}
+			//});
+		}
+
+		$(document).ready(function() {
+
+			// Change status of the checkboxes
+		
+			$('#switch-power-1').change(function() {
+				if($(this).is(":checked")) {				
+					$('.p--status').removeClass('inactive');
+					$('.p--status').addClass('active');
+					$('.p--status').text('Active');
+					$('#switch-power-2').is(':checked', true);
+					$('label[for="switch-power-2"]').addClass('is-checked');
+					PJTcmd('*pow=on#');
+				}
+				else {
+					$('.p--status').removeClass('active');
+					$('.p--status').addClass('inactive');
+					$('.p--status').text('Inactive');
+					$('#switch-power-2').is(':checked', false);
+					$('label[for="switch-power-2"]').removeClass('is-checked');
+					PJTcmd('*pow=off#');
+				}
+			});
+			
+			$('#switch-power-2').change(function() {
+				if($(this).is(":checked")) {				
+					$('.p--status').removeClass('inactive');
+					$('.p--status').addClass('active');
+					$('.p--status').text('Active');
+					$('#switch-power-1').is(':checked', true);
+					$('label[for="switch-power-1"]').addClass('is-checked');
+					PJTcmd('*pow=on#');
+				}
+				else {
+					$('.p--status').removeClass('active');
+					$('.p--status').addClass('inactive');
+					$('.p--status').text('Inactive');
+					$('#switch-power-1').is(':checked', false);
+					$('label[for="switch-power-1"]').removeClass('is-checked');
+					PJTcmd('*pow=off#');
+				}
+			});
+			
+			// Check checkboxes and send out new data to cloud server
+			$('#switch-blank').change(function() {
+				if($(this).is(":checked")) {				
+					PJTcmd('*blank=on#');
+				}
+				else {
+					PJTcmd('*blank=off#');
+				}
+			});
+			
+			$('#switch-eco').change(function() {
+				if($(this).is(":checked")) {				
+					PJTcmd('*lampm=eco#');
+				}
+				else {
+					PJTcmd('*lampm=lnor#');
+				}
+			});
+			
+			$('#switch-rotate').change(function() {
+				if($(this).is(":checked")) {				
+					//PJTcmd('');
+				}
+				else {
+					//PJTcmd('');
+				}
+			});
+			
+			$('#switch-eco').change(function() {
+				if($(this).is(":checked")) {				
+					PJTcmd('*lampm=eco#');
+				}
+				else {
+					PJTcmd('*lampm=lnor#');
+				}
+			});
+			
+			$('#switch-mute').change(function() {
+				if($(this).is(":checked")) {				
+					PJTcmd('*mute=on#');
+				}
+				else {
+					PJTcmd('*mute=off#');
+				}
+			});
+			
+ 			/*$('.mdl-switch__input').change(function() {
+				var cmd = $(this).attr("placeholder");				
+				if($(this).is(":checked")) {
+					cmd += 'on#';					
+				}
+				else {
+					cmd += 'off#';
+				}
+				//alert(cmd);
+				PJTcmd(cmd);
+			});*/
+			
+			  $('#btn_pmode').click(function() {
+				 $('.mdl-overlay').fadeIn( 600, function() {});
+				 $('#select_picture_mode').fadeIn( 200, function() {});
+				 return false;
+			  });
+			  $('#btn_source').click(function() {
+				 $('.mdl-overlay').fadeIn( 600, function() {});
+				 $('#select_source').fadeIn( 200, function() {});
+				 return false;
+			  });
+			  $('.mdl-overlay').click(function() {
+				$('.mdl-overlay').fadeOut( 600, function() {});
+				$('.mdl-popup-frame').fadeOut( 200, function() {});
+			  });
+			  $('.cancel').click(function() {
+				$('.mdl-overlay').fadeOut( 600, function() {});
+				$('.mdl-popup-frame').fadeOut( 200, function() {});
+			  });
+			  
+			  $('#select_picture_mode input').on('change', function() {
+				//alert($('input[name=pmode]:checked', '#select_picture_mode').val()); 
+				$('.mdl-overlay').fadeOut( 600, function() {});
+				$('.mdl-popup-frame').fadeOut( 200, function() {});
+				var cmd = '*appmod=';
+				cmd += $('input[name=source]:checked', '#select_source').val();
+				cmd += '#';
+				PJTcmd(cmd);
+			  });
+			  
+			  $('#select_source input').on('change', function() {
+				//alert($('input[name=source]:checked', '#select_source').val()); 
+				$('.mdl-overlay').fadeOut( 600, function() {});
+				$('.mdl-popup-frame').fadeOut( 200, function() {});
+				var cmd = '*sour=';
+				cmd += $('input[name=source]:checked', '#select_source').val();
+				cmd += '#';
+				PJTcmd(cmd);
+			  });
+			  
+			  
+			  
+			  
+			 /* function displayOutput(m) {
+				if(!m) return;
+				return ' power = ' 		+ m.status + 
+					   ' blank = '  	+ m.blank +
+					   ' rotate = ' 	+ m.rotate +
+					   ' source = ' 	+ m.source +
+					   ' pmode = '  	+ m.pmode +
+					   ' eco = '    	+ m.eco +
+					   ' brightness = ' + m.brightness +
+					   ' volume = ' 	+ m.volume +
+					   ' mute = ' 		+ m.mute;
+					   
+			  }
+
+			  pubnub.subscribe({
+				channel: channel,
+				connect: play,
+				presence: function(m) {
+				  console.log(m);
+
+				  // For Presence Explained Section only
+				  if(document.querySelector('.presence')) {
+					showPresenceExamples(m);
+				  }
+
+				},
+				callback: function(m) {
+				  // Display the data
+				  if(document.querySelector('#data')) {
+					var dataOutput = document.querySelector('#data');
+					dataOutput.innerHTML =  movesOutput.innerHTML + displayOutput(m);
+				  }
+
+				  // Display the move on the board
+				  //var el = document.querySelector('[data-position="'+m.position+'"]');
+				  //el.firstChild.nodeValue = m.player;
+				  //console.log(el);
+
+				  // this is for Pub/Sub explained section.
+				  subscribed(m);
+				},
+			  });
+			  
+			  function publishData(status, blank, rotate, source, pmode, eco, brightness, volume, mute) {
+				pubnub.publish({
+				  channel: channel,
+				  message: {status: status, blank: blank, rotate: rotate, source: source, pmode: pmode, eco: eco, brightness: brightness, volume: volume, mute: mute},
+				  callback: function(m){
+					console.log(m);
+				  }
+				});
+			  }*/
+			  
+
+		});
+	</script>
+	
+	
+  </body>
+</html>
